@@ -1,0 +1,20 @@
+﻿@model TripCalculator.ViewModel.TripBreakDownViewModel
+@{
+    ViewBag.Title = "BreakDown";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">Total Cost of Trip: $@Model.TotalCost</div>
+    </div>
+
+    <h4>Break Down</h4>
+    <div class="row">
+        @foreach(var d in Model.debts)
+        {
+            <div class="col-md-8 col-md-offset-2">
+                @d.debtor needs to pay @d.creditor amount of $@d.amount
+            </div>
+        }
+    </div>
+</div>
