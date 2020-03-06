@@ -60,6 +60,7 @@ namespace TripCalculator.Controllers
                 return HttpNotFound();
             }
             TempData["tripId"] = tripId;
+            ViewBag.tripId = tripId;
             return View(expense);
         }
 

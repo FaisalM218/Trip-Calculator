@@ -17,9 +17,15 @@ namespace TripCalculator.Controllers
         // GET: Bookings/Create
         public ActionResult Create(int tripId = -1)
         {
+            var usersQuery = from u in db.Users
+                    join b in db.Bookings.Where(b => b.TripId == tripId) on u.UserId equals b.UserId into bu
+                    from b in bu.DefaultIfEmpty()
+                    where b == null
+                    select u;
+            
             if (tripId > 0) ViewBag.TripId = new SelectList(db.Trips, "TripId", "Description", new { TripId = tripId });
             else ViewBag.TripId = new SelectList(db.Trips, "TripId", "Description");
-            ViewBag.UserId = new SelectList(db.Users, "UserId", "UserName");
+            ViewBag.UserId = new SelectList(usersQuery.ToList(), "UserId", "UserName");
             return View();
         }
 
@@ -51,6 +57,7 @@ namespace TripCalculator.Controllers
                 return HttpNotFound();
             }
             TempData["tripId"] = tripId;
+            ViewBag.tripId = tripId;
             return View(booking);
         }
 

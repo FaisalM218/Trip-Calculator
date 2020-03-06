@@ -11,6 +11,8 @@ namespace TripCalculator.Models
     {
         public int ExpenseId { get; set; }
         public string Description { get; set; }
+
+        [DataType(DataType.Currency)]
         public decimal Cost { get; set; }
 
         [Required]

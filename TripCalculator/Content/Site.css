@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 60px;
     padding-bottom: 20px;
 }
 
@@ -21,4 +21,28 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+.padding-10 {
+    padding: 10px;
+}
+
+.margin-top-20 {
+    margin-top: 20px;
+}
+
+.remove-list-item-marking {
+    list-style-type: none;
+}
+
+.remove-padding {
+    padding: 0px;
+}
+
+.heading {
+    font-size: 32px;
+}
+
+.remove-margin {
+    margin: 0px !important;
 }

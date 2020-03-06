@@ -3,17 +3,35 @@
     ViewBag.Title = "BreakDown";
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">Total Cost of Trip: $@Model.TotalCost</div>
+<div class="col-md-5 col-md-offset-4 padding-10">
+    <h4>Trip Expenses Summary</h4>
+</div>
+
+<div class="col-md-5 col-md-offset-4">
+
+    <div>
+        <b>Total Cost of Trip: $@Model.TotalCost</b>
     </div>
 
-    <h4>Break Down</h4>
-    <div class="row">
-        @foreach(var d in Model.debts)
+    <div>
+        @foreach(var s in Model.SubTotals)
         {
-            <div class="col-md-8 col-md-offset-2">
-                @d.debtor needs to pay @d.creditor amount of $@d.amount
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Subtotal for @s.name</h3>
+                </div>
+                <div class="panel-body">
+                    $@s.subtotal
+                </div>
+            </div>
+        }
+    </div>
+
+    <div>
+        @foreach (var d in Model.debts)
+        {
+            <div>
+                <h4>@d.debtor needs to pay @d.creditor amount of $@Html.DisplayFor(m => d.amount)</h4>
             </div>
         }
     </div>

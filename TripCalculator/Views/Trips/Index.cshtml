@@ -1,33 +1,31 @@
 ﻿@model IEnumerable<TripCalculator.Models.Trip>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Trips";
 }
 
-<h2>Trips</h2>
+<div class="container-fluid">
+    <div class="col-md-6 col-md-offset-3">
+        <h2>Trips</h2>
+        @foreach (var item in Model)
+        {
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@Html.DisplayFor(modelItem => item.Description)</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-6 col-md-offset-3 padding-10">
+                        @Html.ActionLink("View Details of Trip", "Details", new { id = item.TripId })
+                    </div>
+                    <div class="col-md-6 col-md-offset-3 padding-10">
+                        @Html.ActionLink("View Expense Break Down", "BreakDown", new { id = item.TripId })
+                    </div>
+                </div>
+            </div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th></th>
-    </tr>
+        }
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-info" })
+    </div>
+</div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.TripId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.TripId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.TripId })
-        </td>
-    </tr>
-}
 
-</table>

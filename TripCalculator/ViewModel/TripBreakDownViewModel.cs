@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using TripCalculator.Models;
 
@@ -7,7 +8,9 @@ namespace TripCalculator.ViewModel
 {
     public class TripBreakDownViewModel
     {
+        [DataType(DataType.Currency)]
         public decimal TotalCost { get; set; }
+        public List<UserSubTotal> SubTotals { get; set; }
         public List<UserSubTotal> debtors { get; set; }
         public List<UserSubTotal> creditors { get; set; }
         public List<Debt> debts { get; set; }
@@ -54,6 +57,7 @@ namespace TripCalculator.ViewModel
                 }
             }
 
+            this.SubTotals = subTotals;
             this.TotalCost = total;
         }
 

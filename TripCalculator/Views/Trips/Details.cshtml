@@ -1,93 +1,91 @@
 ﻿@model TripCalculator.Models.Trip
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Trip Details";
 }
 
-<h2>Details</h2>
-
 <div class="container-fluid">
-    <h4>Trip</h4>
-    <hr />
-
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="heading">Trip Details</span>
+                    <span class="padding-10">@Html.ActionLink("Back to List", "Index")</span>
+                </div>
+                
+                <div class="col-md-12 text-right padding-10">
+                    @Html.ActionLink("Calculate Break Down", "BreakDown", new { id = Model.TripId }, new { @class = "btn btn-info" })
+                </div>
+            </div>
             
             <div class="row">
-                <div class="col-md-3">
-                    @Html.DisplayNameFor(model => model.Description)
-                </div>
-
-                <div class="col-md-9">
-                    @Html.DisplayFor(model => model.Description)
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-3">
-                    Users:
-                </div>
-
-                @if (Model.Bookings.Count() == 0)
-                {
-                    <div class="col-md-9">
-                        <strong>None</strong>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">@Html.DisplayFor(model => model.Description)</h3>
                     </div>
-                }
-                else
-                {
-                    <div class="col-md-9">
-                        <ul class="row">
-                            @*display each of the bookings for the trip*@
-                            @foreach (var booking in Model.Bookings)
+                    <div class="panel-body">
+                        <div class="col-md-12 padding-10">
+                            <u><b>Users: </b></u>
+                        </div>
+                        <div class="col-md-12 padding-10">
+                            @if (Model.Bookings.Count() == 0)
                             {
-                                <li>
-                                    <span>@booking.User.UserName</span>
-                                    <span>
-                                        @Html.ActionLink("Remove User", "Delete/" + booking.BookingId, "Bookings",
-                                                        new { tripId = Model.TripId }, null)
-                                    </span>
-                                    
-                                    <ul>
-                                        @*display each of the expense for each user (booking)*@
-                                        @foreach (var expense in booking.Expenses)
+                                <div class="col-md-6 col-md-offset-3 text-center padding-10"><strong>There Are No Users For This Trip</strong></div>
+                                <div class="col-md-6 col-md-offset-3 text-center">
+                                    @*Button for adding new bookings (users) to the trip*@
+                                    @Html.ActionLink("Add User", "Create", "Bookings", new { tripId = Model.TripId },
+                                                     new { @class = "btn btn-info" })
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-12">
+                                    <ul class="col-md-8 col-md-offset-2 col-sm-12 remove-list-item-marking remove-padding">
+                                        @*display each of the bookings for the trip*@
+                                        @foreach (var booking in Model.Bookings)
                                         {
-                                            <li>
-                                                <span>@expense.Description: $@expense.Cost</span>
-                                                <span>
-                                                    @Html.ActionLink("Remove Expense", "Delete/" + expense.ExpenseId, "Expenses",
-                                                        new { tripId = Model.TripId }, null)
+                                            <li class="padding-10">
+                                                <span class="padding-10">@booking.User.FirstName @booking.User.LastName @booking.User.UserName</span>
+                                                <span class="padding-10">
+                                                    @Html.ActionLink("Remove User", "Delete/" + booking.BookingId, "Bookings",
+                                                                    new { tripId = Model.TripId }, new { @class="text-danger" })
                                                 </span>
+
+                                                <ul>
+                                                    @*display each of the expense for each user (booking)*@
+                                                    @foreach (var expense in booking.Expenses)
+                                                    {
+                                                        <li>
+                                                            <span class="padding-10">@expense.Description: $@expense.Cost</span>
+                                                            <span class="padding-10">
+                                                                @Html.ActionLink("Remove Expense", "Delete/" + expense.ExpenseId, "Expenses",
+                                                                    new { tripId = Model.TripId }, new { @class="text-danger" })
+                                                            </span>
+                                                        </li>
+                                                    }
+                                                    <li>
+                                                        @*Button for adding new expense for this user and this trip*@
+                                                        @Html.ActionLink("Add Expense", "Create", "Expenses", new { bookingId = booking.BookingId }, null)
+                                                    </li>
+
+                                                </ul>
+
                                             </li>
                                         }
-                                        <li>
-                                            @*Button for adding new expense for this user and this trip*@
-                                            @Html.ActionLink("Add Expense", "Create", "Expenses", new { bookingId = booking.BookingId }, null)
+
+                                        <li class="padding-10">
+                                            @*Button for adding new bookings (users) to the trip*@
+                                            @Html.ActionLink("Add User", "Create", "Bookings", new { tripId = Model.TripId }, null)
                                         </li>
-
                                     </ul>
-
-                                </li>
+                                </div>
                             }
-
-                            <li>
-                                @*Button for adding new bookings (users) to the trip*@
-                                @Html.ActionLink("Add User", "Create", "Bookings", new { tripId = Model.TripId }, null)
-                            </li>
-                        </ul>
+                        </div>
                     </div>
-                }
+                </div>
             </div>
-
         </div>
     </div>
 </div>
 
-<div class="col-md-12">
-    @Html.ActionLink("Calculate Break Down", "BreakDown", new { id = Model.TripId })
-</div>
 
-<div class="col-md-12">
-    @Html.ActionLink("Edit", "Edit", new { id = Model.TripId }) |
-    @Html.ActionLink("Back to List", "Index")
-</div>
