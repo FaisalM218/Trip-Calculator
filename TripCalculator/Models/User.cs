@@ -12,9 +12,19 @@ namespace TripCalculator.Models
         public int UserId { get; set; }
 
         [Index(IsUnique = true)]
-        [StringLength(50)]
+        [StringLength(30, ErrorMessage = "Do not enter more than 30 characters")]
+        [Display(Name = "User Name")]
+        [Required]
         public string UserName { get; set; }
+
+        [StringLength(30, ErrorMessage = "Do not enter more than 30 characters")]
+        [Display(Name = "First Name")]
+        [Required]
         public string FirstName { get; set; }
+
+        [StringLength(30, ErrorMessage = "Do not enter more than 30 characters")]
+        [Display(Name = "Last Name")]
+        [Required]
         public string LastName { get; set; }
     }
 }

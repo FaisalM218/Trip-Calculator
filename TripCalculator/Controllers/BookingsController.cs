@@ -17,12 +17,14 @@ namespace TripCalculator.Controllers
         // GET: Bookings/Create
         public ActionResult Create(int tripId = -1)
         {
+            //This query gets all users who are not already booked for this trip
             var usersQuery = from u in db.Users
                     join b in db.Bookings.Where(b => b.TripId == tripId) on u.UserId equals b.UserId into bu
                     from b in bu.DefaultIfEmpty()
                     where b == null
                     select u;
             
+            //If a trip id is provided, we make the specified trip the default selected trip in the drop down.
             if (tripId > 0) ViewBag.TripId = new SelectList(db.Trips, "TripId", "Description", new { TripId = tripId });
             else ViewBag.TripId = new SelectList(db.Trips, "TripId", "Description");
             ViewBag.UserId = new SelectList(usersQuery.ToList(), "UserId", "UserName");
@@ -38,6 +40,7 @@ namespace TripCalculator.Controllers
             {
                 db.Bookings.Add(booking);
                 db.SaveChanges();
+                //Redirect back to the details page of the trip
                 return RedirectToAction("Details", "Trips", new { id = booking.TripId });
             }
 
@@ -56,6 +59,8 @@ namespace TripCalculator.Controllers
             {
                 return HttpNotFound();
             }
+
+            //We use the tempdata and viewbag to be able to redirect back to the details page of the trip.
             TempData["tripId"] = tripId;
             ViewBag.tripId = tripId;
             return View(booking);

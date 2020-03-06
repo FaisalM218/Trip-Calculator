@@ -28,11 +28,18 @@
     </div>
 
     <div>
-        @foreach (var d in Model.debts)
+        @if (Model.debts.Count() == 0)
         {
-            <div>
-                <h4>@d.debtor needs to pay @d.creditor amount of $@Html.DisplayFor(m => d.amount)</h4>
-            </div>
+            <h4>No one owes anyone anything.</h4>
+        }
+        else
+        {
+            foreach (var d in Model.debts)
+            {
+                <div>
+                    <h4>@d.debtor needs to pay @d.creditor amount of $@Html.DisplayFor(m => d.amount)</h4>
+                </div>
+            }
         }
     </div>
 </div>

@@ -91,6 +91,7 @@ namespace TripCalculator.Controllers
             Trip trip = db.Trips.Where(t => t.TripId == id).Include(t => t.Bookings.Select(b => b.Expenses))
                                 .SingleOrDefault();
 
+            //This view model calculates the sub totals for each user, and how much each user owes.
             TripBreakDownViewModel breakDownModel = new TripBreakDownViewModel(trip.Bookings.ToList());
 
             return View(breakDownModel);

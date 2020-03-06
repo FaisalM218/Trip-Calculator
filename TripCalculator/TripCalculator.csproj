@@ -129,7 +129,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BookingsController.cs" />
     <Compile Include="Controllers\ExpensesController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TripsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Data_Access_Layer\CalculatorContext.cs" />
@@ -139,6 +138,7 @@
     </Compile>
     <Compile Include="Models\Booking.cs" />
     <Compile Include="Models\Expense.cs" />
+    <Compile Include="Models\ICalculatorContext.cs" />
     <Compile Include="Models\Trip.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -180,9 +180,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Trips\Create.cshtml" />
     <Content Include="Views\Trips\Details.cshtml" />
     <Content Include="Views\Trips\Index.cshtml" />

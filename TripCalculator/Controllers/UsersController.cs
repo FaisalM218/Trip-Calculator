@@ -13,7 +13,14 @@ namespace TripCalculator.Controllers
 {
     public class UsersController : Controller
     {
-        private CalculatorContext db = new CalculatorContext();
+        private ICalculatorContext db = new CalculatorContext();
+
+        public UsersController() { }
+
+        public UsersController(ICalculatorContext context)
+        {
+            this.db = context;
+        }
 
         // GET: Users
         public ActionResult Index()

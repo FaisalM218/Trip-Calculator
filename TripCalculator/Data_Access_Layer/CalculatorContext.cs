@@ -7,7 +7,7 @@ using TripCalculator.Models;
 
 namespace TripCalculator.Data_Access_Layer
 {
-    public class CalculatorContext : DbContext
+    public class CalculatorContext : DbContext, ICalculatorContext
     {
         public CalculatorContext() : base("CalculatorContext")
         {

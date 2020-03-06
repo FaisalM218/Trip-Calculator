@@ -45,7 +45,7 @@
                                         @foreach (var booking in Model.Bookings)
                                         {
                                             <li class="padding-10">
-                                                <span class="padding-10">@booking.User.FirstName @booking.User.LastName @booking.User.UserName</span>
+                                                <span class="padding-10">@booking.User.FirstName @booking.User.LastName (@booking.User.UserName)</span>
                                                 <span class="padding-10">
                                                     @Html.ActionLink("Remove User", "Delete/" + booking.BookingId, "Bookings",
                                                                     new { tripId = Model.TripId }, new { @class="text-danger" })

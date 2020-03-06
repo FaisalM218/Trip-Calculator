@@ -30,8 +30,6 @@ namespace TripCalculator.Controllers
         }
 
         // POST: Expenses/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ExpenseId,Description,Cost,BookingId")] Expense expense)
@@ -59,6 +57,8 @@ namespace TripCalculator.Controllers
             {
                 return HttpNotFound();
             }
+
+            //We use the tempdata and viewbag to be able to redirect back to the details page of the trip.
             TempData["tripId"] = tripId;
             ViewBag.tripId = tripId;
             return View(expense);
