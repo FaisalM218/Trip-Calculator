@@ -40,11 +40,10 @@ namespace TripCalculator.Controllers
             {
                 db.Bookings.Add(booking);
                 db.SaveChanges();
-                //Redirect back to the details page of the trip
-                return RedirectToAction("Details", "Trips", new { id = booking.TripId });
             }
 
-            return View(booking);
+            //Redirect back to the details page of the trip
+            return RedirectToAction("Details", "Trips", new { id = booking.TripId });
         }
 
         // GET: Bookings/Delete/5?tripId=2
