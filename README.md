@@ -5,5 +5,3 @@ This project was made using Visual Studio 2019. The project template was an ASP.
 
 Once you clone the solution, open the solution in visual studio and perform a NuGet package restore. Then run the TripCalculator project. This should launch the application in the browser and create a local database.
 Along with the web application, there is also a unit test project in the same solution. I only created two unit tests, but I set up the infrastructure (such as mock objects) in order for furthur tests to be written easily.
-
-The Domain I selected was Trip Calculator. And the Interface I selected was Web UI (Server-generated). Platform was .NET and Backend was C#. I did not utilize any Frontend frameworks.
