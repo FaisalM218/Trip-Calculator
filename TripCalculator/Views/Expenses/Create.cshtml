@@ -33,6 +33,14 @@
             </div>
 
             <div class="form-group remove-margin">
+                @Html.LabelFor(model => model.Currency, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.DropDownList("Currency", (List<SelectListItem>)ViewBag.currencies, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Cost, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group remove-margin">
                 <div class="padding-10">
                     <input type="submit" value="Create" class="btn btn-info" />
                 </div>

@@ -21,6 +21,9 @@ namespace TripCalculator.Models
         public decimal Cost { get; set; }
 
         [Required]
+        public string Currency { get; set; }
+
+        [Required]
         public int BookingId { get; set; }
     }
 }

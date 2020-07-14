@@ -11,6 +11,12 @@ namespace TripCalculator.Data_Access_Layer
     {
         public CalculatorContext() : base("CalculatorContext")
         {
+            currencies = new List<Currency>();
+            Currency cadCurrency = new Currency() { Name = "CAD", Conversion = 1.44m };
+
+            Currency usdCurrency = new Currency() { Name = "USD", Conversion = 1.00m };
+            currencies.Add(cadCurrency);
+            currencies.Add(usdCurrency);
         }
 
         public DbSet<User> Users { get; set; }
@@ -18,5 +24,7 @@ namespace TripCalculator.Data_Access_Layer
         public DbSet<Trip> Trips { get; set; }
 
         public DbSet<Booking> Bookings { get; set; }
+
+        public List<Currency> currencies { get; set; }
     }
 }

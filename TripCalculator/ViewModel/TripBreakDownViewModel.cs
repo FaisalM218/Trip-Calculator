@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using TripCalculator.Data_Access_Layer;
 using TripCalculator.Models;
 
 namespace TripCalculator.ViewModel
@@ -14,9 +15,13 @@ namespace TripCalculator.ViewModel
         public List<UserSubTotal> debtors { get; set; } //The users who owe money
         public List<UserSubTotal> creditors { get; set; } //The users who will receive money
         public List<Debt> debts { get; set; } //This is a list of who will pay who and how much 
+        private CalculatorContext db;
+
+        private readonly decimal conversion = 1.44m;
 
         public TripBreakDownViewModel(List<Booking> bookings)
         {
+            db = new CalculatorContext();
             debtors = new List<UserSubTotal>();
             creditors = new List<UserSubTotal>();
             debts = new List<Debt>();
@@ -26,6 +31,7 @@ namespace TripCalculator.ViewModel
 
         private void calculateTotalCostAndSubTotals(List<Booking> bookings)
         {
+            
             decimal total = 0;
             List<UserSubTotal> subTotals = new List<UserSubTotal>(); 
 
@@ -36,8 +42,10 @@ namespace TripCalculator.ViewModel
                 UserSubTotal newSubTotal = new UserSubTotal { name = b.User.UserName, subtotal = 0, balance = 0 };
                 foreach(Expense e in b.Expenses)
                 {
-                    total += e.Cost;
-                    newSubTotal.subtotal += e.Cost;
+                    Currency currentCurrency = db.currencies.Where(c => c.Name == e.Currency).FirstOrDefault();
+                    decimal cost = e.Cost / currentCurrency.Conversion;
+                    total += cost;
+                    newSubTotal.subtotal += cost;
                 }
                 subTotals.Add(newSubTotal);
             }

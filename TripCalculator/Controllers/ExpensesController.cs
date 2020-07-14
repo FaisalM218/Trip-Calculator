@@ -22,6 +22,15 @@ namespace TripCalculator.Controllers
                                          .SingleOrDefault();
             ViewBag.userName = booking.User.FirstName;
             ViewBag.tripDescription = booking.Trip.Description;
+            List<SelectListItem> currencies = new List<SelectListItem>();
+            foreach(Currency c in db.currencies.ToList())
+            {
+                SelectListItem currItem = new SelectListItem();
+                currItem.Value = c.Name;
+                currItem.Text = c.Name;
+                currencies.Add(currItem);
+            }
+            ViewBag.currencies = currencies;
             //the trip id is used to navigate back ot the trip details page once this expense is added
             TempData["tripId"] = booking.TripId;
             Expense newExpense = new Expense { BookingId = bookingId };
@@ -32,7 +41,7 @@ namespace TripCalculator.Controllers
         // POST: Expenses/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ExpenseId,Description,Cost,BookingId")] Expense expense)
+        public ActionResult Create([Bind(Include = "ExpenseId,Description,Cost,BookingId,Currency")] Expense expense)
         {
             if (ModelState.IsValid)
             {

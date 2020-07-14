@@ -56,7 +56,7 @@
                                                     @foreach (var expense in booking.Expenses)
                                                     {
                                                         <li>
-                                                            <span class="padding-10">@expense.Description: $@expense.Cost</span>
+                                                            <span class="padding-10">@expense.Description: $@expense.Cost @expense.Currency</span>
                                                             <span class="padding-10">
                                                                 @Html.ActionLink("Remove Expense", "Delete/" + expense.ExpenseId, "Expenses",
                                                                     new { tripId = Model.TripId }, new { @class="text-danger" })
