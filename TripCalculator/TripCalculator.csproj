@@ -190,6 +190,8 @@
     <Content Include="Views\Bookings\Create.cshtml" />
     <Content Include="Views\Trips\BreakDown.cshtml" />
     <Content Include="Views\Bookings\Delete.cshtml" />
+    <Content Include="Views\Users\SignUp.cshtml" />
+    <Content Include="Views\Users\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

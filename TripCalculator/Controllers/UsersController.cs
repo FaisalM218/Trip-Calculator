@@ -6,11 +6,13 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using TripCalculator.Data_Access_Layer;
 using TripCalculator.Models;
 
 namespace TripCalculator.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private ICalculatorContext db = new CalculatorContext();
@@ -49,6 +51,64 @@ namespace TripCalculator.Controllers
             }
 
             return View(user);
+        }
+
+        //GET: Users/Login
+        [AllowAnonymous]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        // POST: Users/Login
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Login([Bind(Include = "UserId,UserName,Password")] User user)
+        {
+            User res = db.Users.Where(u => u.UserName == user.UserName && u.Password == user.Password).FirstOrDefault();
+            if(res == null)
+            {
+                ModelState.AddModelError("", "User name and password don't match");
+                return View();
+            }
+            else
+            {
+                FormsAuthentication.SetAuthCookie(user.UserName, false);
+                return RedirectToAction("Index");
+            }
+        }
+
+        //GET: Users/SignUp
+        [AllowAnonymous]
+        public ActionResult SignUp()
+        {
+            return View();
+        }
+
+        // POST: Users/SignUp
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public ActionResult SignUp([Bind(Include = "UserId,UserName,Password,FirstName,LastName")] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Users.Add(user);
+                db.SaveChanges();
+                FormsAuthentication.SetAuthCookie(user.UserName, false);
+                return RedirectToAction("Index");
+            }
+
+            return View(user);
+        }
+
+        //GET: Users/Logout
+        [AllowAnonymous]
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
         }
 
         protected override void Dispose(bool disposing)

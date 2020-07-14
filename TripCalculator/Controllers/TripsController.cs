@@ -12,6 +12,7 @@ using TripCalculator.ViewModel;
 
 namespace TripCalculator.Controllers
 {
+    [Authorize]
     public class TripsController : Controller
     {
         private CalculatorContext db = new CalculatorContext();

@@ -17,6 +17,11 @@ namespace TripCalculator.Models
         [Required]
         public string UserName { get; set; }
 
+        [Index(IsUnique = true)]
+        [StringLength(30, ErrorMessage = "Do not enter more than 30 characters")]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
         [StringLength(30, ErrorMessage = "Do not enter more than 30 characters")]
         [Display(Name = "First Name")]
         [Required]

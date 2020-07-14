@@ -1,7 +1,7 @@
 ﻿@model TripCalculator.Models.User
 
 @{
-    ViewBag.Title = "Create User";
+    ViewBag.Title = "Sign Up";
 }
 
 
@@ -10,14 +10,15 @@
     @Html.AntiForgeryToken()
 
     <div class="col-md-5 col-md-offset-4 padding-10">
-        <h4>Create New User</h4>
+        <h4>Sign Up</h4>
         <div>
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Log in", "LogIn")
         </div>
     </div>
 
     <div class="col-md-5 col-md-offset-4 padding-10">
         <div class="form-horizontal">
+
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
                 @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })
@@ -28,9 +29,17 @@
             </div>
 
             <div class="form-group">
+                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
                 @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label" })
                 <div>
-                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.PasswordFor(model => model.FirstName, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -38,19 +47,20 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label" })
                 <div>
-                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.PasswordFor(model => model.LastName, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
                 </div>
             </div>
 
-            <div class="form-group remove-margin">
-                <div class="padding-10">
-                    <input type="submit" value="Create" class="btn btn-info" />
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="submit" value="Sign Up" class="btn btn-info" />
                 </div>
             </div>
         </div>
     </div>
 }
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
