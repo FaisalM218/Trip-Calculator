@@ -1,33 +1,35 @@
-﻿using System;
+﻿using AutoMapper;
+using BLL;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using TripCalculator.Data_Access_Layer;
 using TripCalculator.Models;
 
 namespace TripCalculator.Controllers
 {
     public class BookingsController : Controller
     {
-        private CalculatorContext db = new CalculatorContext();
+        private UserProcessor userProcessor = new UserProcessor();
+        private TripProcessor tripProcessor = new TripProcessor();
+        private BookingProcessor bookingProcessor = new BookingProcessor();
+        private IMapper mapper = GlobalVariables.mapper.CreateMapper();
 
         // GET: Bookings/Create
         public ActionResult Create(int tripId = -1)
         {
             //This query gets all users who are not already booked for this trip
-            var usersQuery = from u in db.Users
-                    join b in db.Bookings.Where(b => b.TripId == tripId) on u.UserId equals b.UserId into bu
-                    from b in bu.DefaultIfEmpty()
-                    where b == null
-                    select u;
-            
+
+            List<User> users = userProcessor.getUsersNotBookedForTrip(tripId).Select(u => mapper.Map<User>(u)).ToList();
+
             //If a trip id is provided, we make the specified trip the default selected trip in the drop down.
-            if (tripId > 0) ViewBag.TripId = new SelectList(db.Trips, "TripId", "Description", new { TripId = tripId });
-            else ViewBag.TripId = new SelectList(db.Trips, "TripId", "Description");
-            ViewBag.UserId = new SelectList(usersQuery.ToList(), "UserId", "UserName");
+            List<Trip> trips = tripProcessor.getAllTrips().Select(t => mapper.Map<Trip>(t)).ToList();
+            if (tripId > 0) ViewBag.TripId = new SelectList(trips, "TripId", "Description", new { TripId = tripId });
+            else ViewBag.TripId = new SelectList(trips, "TripId", "Description");
+            ViewBag.UserId = new SelectList(users, "UserId", "UserName");
             return View();
         }
 
@@ -38,8 +40,7 @@ namespace TripCalculator.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Bookings.Add(booking);
-                db.SaveChanges();
+                bookingProcessor.createBooking(mapper.Map<DAL.Models.Booking>(booking));
             }
 
             //Redirect back to the details page of the trip
@@ -53,7 +54,7 @@ namespace TripCalculator.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Booking booking = db.Bookings.Where(b => b.BookingId == id).Include(b => b.User).Include(b => b.Trip).SingleOrDefault();
+            Booking booking = mapper.Map<Booking>(bookingProcessor.getBookingById(id));
             if (booking == null)
             {
                 return HttpNotFound();
@@ -70,9 +71,7 @@ namespace TripCalculator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Booking booking = db.Bookings.Find(id);
-            db.Bookings.Remove(booking);
-            db.SaveChanges();
+            bookingProcessor.deleteBooking(id);
             return RedirectToAction("Details", "Trips", new { id = TempData["tripId"] });
         }
     }

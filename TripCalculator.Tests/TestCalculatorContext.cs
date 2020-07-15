@@ -1,10 +1,11 @@
-﻿using System;
+﻿using DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TripCalculator.Models;
 
 namespace TripCalculator.Tests
 {
@@ -27,6 +28,11 @@ namespace TripCalculator.Tests
         public DbSet<Booking> Bookings { get; set; }
 
         public void Dispose(){ }
+
+        public DbEntityEntry Entry(object entity)
+        {
+            return null;
+        }
 
         public int SaveChanges()
         {

@@ -6,20 +6,23 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using TripCalculator.Data_Access_Layer;
 using TripCalculator.Models;
 using TripCalculator.ViewModel;
+using BLL;
+using AutoMapper;
 
 namespace TripCalculator.Controllers
 {
     public class TripsController : Controller
     {
-        private CalculatorContext db = new CalculatorContext();
+        private TripProcessor tripProcessor = new TripProcessor();
+        private IMapper mapper = GlobalVariables.mapper.CreateMapper();
 
         // GET: Trips
         public ActionResult Index()
         {
-            return View(db.Trips.ToList());
+            List<Trip> trips = tripProcessor.getAllTrips().ToList().Select(t => mapper.Map<Trip>(t)).ToList();
+            return View(trips);
         }
 
         // GET: Trips/Details/5
@@ -29,8 +32,9 @@ namespace TripCalculator.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Trip trip = db.Trips.Where(t => t.TripId == id).Include(t  => t.Bookings.Select(b => b.Expenses))
-                                .SingleOrDefault();
+
+            Trip trip = mapper.Map<Trip>(tripProcessor.getTripDetails(id));
+            
             if (trip == null)
             {
                 return HttpNotFound();
@@ -51,8 +55,7 @@ namespace TripCalculator.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Trips.Add(trip);
-                db.SaveChanges();
+                tripProcessor.createTrip(mapper.Map<DAL.Models.Trip>(trip));
                 return View("Details", trip);
             }
 
@@ -66,7 +69,7 @@ namespace TripCalculator.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Trip trip = db.Trips.Find(id);
+            Trip trip = mapper.Map<Trip>(tripProcessor.getTripDetails(id));
             if (trip == null)
             {
                 return HttpNotFound();
@@ -79,31 +82,19 @@ namespace TripCalculator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Trip trip = db.Trips.Find(id);
-            db.Trips.Remove(trip);
-            db.SaveChanges();
+            tripProcessor.deleteTrip(id);
             return RedirectToAction("Index");
         }
 
         // GET: Trips/BreakDown/5
         public ActionResult BreakDown(int id)
         {
-            Trip trip = db.Trips.Where(t => t.TripId == id).Include(t => t.Bookings.Select(b => b.Expenses))
-                                .SingleOrDefault();
+            Trip trip = mapper.Map<Trip>(tripProcessor.getTripDetails(id));
 
             //This view model calculates the sub totals for each user, and how much each user owes.
             TripBreakDownViewModel breakDownModel = new TripBreakDownViewModel(trip.Bookings.ToList());
 
             return View(breakDownModel);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AutoMapper;
+using BLL;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -6,26 +8,26 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using TripCalculator.Data_Access_Layer;
 using TripCalculator.Models;
 
 namespace TripCalculator.Controllers
 {
     public class UsersController : Controller
     {
-        private ICalculatorContext db = new CalculatorContext();
+        private UserProcessor userProcessor = new UserProcessor();
+        private IMapper mapper = GlobalVariables.mapper.CreateMapper();
 
         public UsersController() { }
-
-        public UsersController(ICalculatorContext context)
+        public UsersController(UserProcessor processor)
         {
-            this.db = context;
+            userProcessor = processor;
         }
 
         // GET: Users
         public ActionResult Index()
         {
-            return View(db.Users.ToList());
+            List<User> users = userProcessor.getAllUsers().Select(u => mapper.Map<User>(u)).ToList();
+            return View(users);
         }
 
         // GET: Users/Create
@@ -43,21 +45,11 @@ namespace TripCalculator.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Users.Add(user);
-                db.SaveChanges();
+                userProcessor.addUser(mapper.Map<DAL.Models.User>(user));
                 return RedirectToAction("Index");
             }
 
             return View(user);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

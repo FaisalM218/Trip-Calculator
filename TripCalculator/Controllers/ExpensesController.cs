@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AutoMapper;
+using BLL;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -6,20 +8,20 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using TripCalculator.Data_Access_Layer;
 using TripCalculator.Models;
 
 namespace TripCalculator.Controllers
 {
     public class ExpensesController : Controller
     {
-        private CalculatorContext db = new CalculatorContext();
+        private BookingProcessor bookingProcessor = new BookingProcessor();
+        private ExpenseProcessor expenseProcessor = new ExpenseProcessor();
+        private IMapper mapper = GlobalVariables.mapper.CreateMapper();
 
         // GET: Expenses/Create?bookingId
         public ActionResult Create(int bookingId)
         {
-            Booking booking = db.Bookings.Where(b => b.BookingId == bookingId).Include(b => b.User).Include(b => b.Trip)
-                                         .SingleOrDefault();
+            Booking booking = mapper.Map<Booking>(bookingProcessor.getBookingById(bookingId));
             ViewBag.userName = booking.User.FirstName;
             ViewBag.tripDescription = booking.Trip.Description;
             //the trip id is used to navigate back ot the trip details page once this expense is added
@@ -36,8 +38,7 @@ namespace TripCalculator.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Expenses.Add(expense);
-                db.SaveChanges();
+                expenseProcessor.createExpense(mapper.Map<DAL.Models.Expense>(expense));
                 int tripId = TempData["tripId"] != null ? (int)TempData["tripId"] : 0;
                 return RedirectToAction("Details", "Trips", new { id = tripId });
             }
@@ -52,7 +53,7 @@ namespace TripCalculator.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Expense expense = db.Expenses.Find(id);
+            Expense expense = mapper.Map<Expense>(expenseProcessor.getExpenseById(id));
             if (expense == null)
             {
                 return HttpNotFound();
@@ -69,19 +70,8 @@ namespace TripCalculator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Expense expense = db.Expenses.Find(id);
-            db.Expenses.Remove(expense);
-            db.SaveChanges();
+            expenseProcessor.deleteExpense(id);
             return RedirectToAction("Details", "Trips", new { id = TempData["tripId"] });
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

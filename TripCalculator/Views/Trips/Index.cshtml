@@ -20,6 +20,9 @@
                     <div class="col-md-6 col-md-offset-3 padding-10">
                         @Html.ActionLink("View Expense Break Down", "BreakDown", new { id = item.TripId })
                     </div>
+                    <div class="col-md-6 col-md-offset-3 padding-10">
+                        @Html.ActionLink("Delete Trip", "Delete", new { id = item.TripId }, new { @class="text-danger" })
+                    </div>
                 </div>
             </div>
 

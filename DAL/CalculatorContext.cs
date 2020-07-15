@@ -1,11 +1,12 @@
-﻿using System;
+﻿using DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
-using TripCalculator.Models;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace TripCalculator.Data_Access_Layer
+namespace DAL
 {
     public class CalculatorContext : DbContext, ICalculatorContext
     {
